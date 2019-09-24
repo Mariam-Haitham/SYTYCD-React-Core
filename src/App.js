@@ -15,24 +15,25 @@ const instance = axios.create({
 
 class App extends Component {
   state = {
-    authors: null,
+    authors: [],
     books: [],
-    loading: false
+    loading: true
   };
 
   fetchAllAuthors = async () => {
-    const res = await instance.put("/api/authors/");
+    const res = await instance.get("/api/authors/");
     return res.data;
   };
 
   fetchAllBooks = async () => {
-    const res = await instance.get("/-api/books/");
+    const res = await instance.get("/api/books/");
     return res.data;
   };
 
   async componentDidMount() {
     try {
       const authors = await this.fetchAllAuthors();
+      console.log(authors);
       const books = await this.fetchAllBooks();
 
       /**
@@ -48,6 +49,8 @@ class App extends Component {
         books: books,
         loading: false
       });
+      console.log(this.state.authors);
+      console.log(this.state.books);
     } catch (err) {
       console.error(err);
     }
@@ -60,7 +63,7 @@ class App extends Component {
       return (
         <Switch>
           <Redirect exact from="/" to="/authors" />
-          <Route path="/authors/:ID" component={AuthorDetail} />
+          <Route path="/authors/:authorID" component={AuthorDetail} />
           <Route
             path="/authors/"
             render={props => (
